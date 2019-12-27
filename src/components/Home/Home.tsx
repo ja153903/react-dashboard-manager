@@ -1,12 +1,27 @@
 import React from "react";
 import { observer } from "mobx-react";
+import { withRouter } from "react-router";
+import { History } from "history";
 
-const Home: React.FC = () => {
+import { useGlobalStore } from "../../hooks/useStores";
+import SideMenu from "../SideMenu";
+
+type HomeProps = {
+  history: History;
+};
+
+const Home: React.FC<HomeProps> = ({ history }) => {
+  const { authorizationStore } = useGlobalStore();
+
+  if (authorizationStore.userToken === null) {
+    history.push("/");
+  }
+
   return (
     <div>
-      <h1>This is the home page</h1>
+      <SideMenu />
     </div>
   );
 };
 
-export default observer(Home);
+export default observer(withRouter(Home));
